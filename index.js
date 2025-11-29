@@ -3,6 +3,15 @@ const body = document.body;
 const html = document.documentElement;
 const starsContainer = document.getElementById('stars-container');
 
+function rgb(hex) {
+    return {
+        r: parseInt(hex.slice(1, 3), 16),
+        g: parseInt(hex.slice(3, 5), 16),
+        b: parseInt(hex.slice(5, 7), 16)
+    };
+}
+
+
 // Create stars
 function createStars(count) {
     for (let i = 0; i < count; i++) {
@@ -20,7 +29,7 @@ function createStars(count) {
 
         // Random animation delay
         star.style.animationDelay = Math.random() * 3 + 's';
-        star.style.animationDuration = Math.random() * 120 + 30 + 's';
+        star.style.animationDuration = Math.random() * 60 + 30 + 's';
 
         starsContainer.appendChild(star);
     }
@@ -37,20 +46,20 @@ window.addEventListener('scroll', () => {
 
     // Get the bottom of the text content (excluding the padding-bottom)
     const textContentHeight = container.scrollHeight - window.innerHeight;
-    const contentEnd = container.offsetTop + container.querySelector('.attribution').offsetTop + 200;
+    const contentEnd = container.offsetTop + container.querySelector('.attribution').offsetTop + 1000;
 
     // Calculate how far past the content we've scrolled
     const scrollPastContent = Math.max(0, scrollTop - contentEnd);
-    const maxScroll = 800; // Distance to scroll for full night effect
+    const maxScroll = 5000; // Distance to scroll for full night effect
 
     // Progress from 0 to 1
     const progress = Math.min(scrollPastContent / maxScroll, 1);
 
     if (progress > 0) {
         // Create gradient from day to night
-        const dayColor = { r: 255, g: 253, b: 248 }; // #fffdf8
-        const duskColor = { r: 25, g: 25, b: 60 };
-        const nightColor = { r: 10, g: 10, b: 30 };
+        const dayColor = rgb("#fffdf8");
+        const duskColor = rgb("#0b0205");
+        const nightColor = rgb("#020209");
 
         let r, g, b;
 
