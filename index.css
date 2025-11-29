@@ -2,6 +2,42 @@ html {
     font-size: 120%;
 }
 
+body {
+    background: #fffdf8;
+    transition: background 0.3s ease;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Stars container */
+#stars-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1s ease;
+    z-index: -1;
+}
+
+#stars-container.visible {
+    opacity: 1;
+}
+
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 30s infinite ease-in-out;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
 .container {
     font-family: "Libre Baskerville", serif;
     font-weight: 400;
