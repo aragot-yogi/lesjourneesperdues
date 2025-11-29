@@ -13,14 +13,14 @@ function createStars(count) {
         star.style.left = Math.random() * 100 + '%';
         star.style.top = Math.random() * 100 + '%';
 
-        // Random size (1-3px)
-        const size = Math.random() * 2 + 1;
-        star.style.width = size + 'px';
-        star.style.height = size + 'px';
+        // Random size (0.03-0.08rem)
+        const size = Math.random() * 0.05 + 0.03;
+        star.style.width = size + 'rem';
+        star.style.height = size + 'rem';
 
         // Random animation delay
         star.style.animationDelay = Math.random() * 3 + 's';
-        star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        star.style.animationDuration = Math.random() * 120 + 30 + 's';
 
         starsContainer.appendChild(star);
     }
