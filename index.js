@@ -23,7 +23,7 @@ function createStars(count) {
         star.style.top = Math.random() * 100 + '%';
 
         // Random size (0.03-0.08rem)
-        const size = Math.random() * 0.05 + 0.03;
+        const size = Math.random() * 0.02 + 0.003;
         star.style.width = size + 'rem';
         star.style.height = size + 'rem';
 
@@ -36,7 +36,7 @@ function createStars(count) {
 }
 
 // Create 200 stars
-createStars(200);
+createStars(90);
 
 // Get the text content height
 const container = document.querySelector('.container');
@@ -59,28 +59,31 @@ window.addEventListener('scroll', () => {
         // Create gradient from day to night
         const dayColor = rgb("#fffdf8");
         const duskColor = rgb("#0b0205");
-        const nightColor = rgb("#020209");
+        const nightColor = rgb("#02020F");
 
         let r, g, b;
+        function mix(color1, color2, t) {
+            return {
+                r: Math.round(color1.r + (color2.r - color1.r) * t),
+                g: Math.round(color1.g + (color2.g - color1.g) * t),
+                b: Math.round(color1.b + (color2.b - color1.b) * t),
+            }
+        }
 
+        let result;
         if (progress < 0.5) {
             // Day to dusk
             const t = progress * 2;
-            r = Math.round(dayColor.r + (duskColor.r - dayColor.r) * t);
-            g = Math.round(dayColor.g + (duskColor.g - dayColor.g) * t);
-            b = Math.round(dayColor.b + (duskColor.b - dayColor.b) * t);
+            result = mix(dayColor, duskColor, t);
         } else {
             // Dusk to night
             const t = (progress - 0.5) * 2;
-            r = Math.round(duskColor.r + (nightColor.r - duskColor.r) * t);
-            g = Math.round(duskColor.g + (nightColor.g - duskColor.g) * t);
-            b = Math.round(duskColor.b + (nightColor.b - duskColor.b) * t);
+            result = mix(duskColor, nightColor, t);
         }
 
-        // Apply gradient background
         const gradient = `linear-gradient(to bottom,
-            rgb(${r}, ${g}, ${b}) 0%,
-            rgb(${Math.max(0, r - 5)}, ${Math.max(0, g - 5)}, ${Math.max(0, b + 20)}) 100%)`;
+            rgb(${result.r}, ${result.g}, ${result.b}) 0%,
+            rgb(${Math.max(0, result.r - 5)}, ${Math.max(0, result.g - 5)}, ${Math.max(0, result.b - 5)}) 100%)`;
 
         body.style.background = gradient;
         body.style.backgroundAttachment = 'fixed';
