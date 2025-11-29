@@ -11,6 +11,10 @@ function rgb(hex) {
     };
 }
 
+/** Return a range from 0 to 1 when t=min to t=max */
+function calcProgress(t, min, max) {
+    return Math.min(Math.max(0, (t - min) / (max - min)), 1);
+}
 
 // Create stars
 function createStars(count) {
@@ -50,18 +54,18 @@ window.addEventListener('scroll', () => {
 
     // Calculate how far past the content we've scrolled
     const scrollPastContent = Math.max(0, scrollTop - contentEnd);
-    const maxScroll = 5000; // Distance to scroll for full night effect
+    const maxScroll = document.body.clientHeight - contentEnd; // Distance to scroll for full night effect
 
     // Progress from 0 to 1
     const progress = Math.min(scrollPastContent / maxScroll, 1);
+    console.log(progress);
 
     if (progress > 0) {
         // Create gradient from day to night
         const dayColor = rgb("#fffdf8");
-        const duskColor = rgb("#0b0205");
-        const nightColor = rgb("#02020F");
+        const nightColor = rgb("#020205");
+        const duskColor = rgb("#0b0c2a");
 
-        let r, g, b;
         function mix(color1, color2, t) {
             return {
                 r: Math.round(color1.r + (color2.r - color1.r) * t),
@@ -70,23 +74,26 @@ window.addEventListener('scroll', () => {
             }
         }
 
-        let result;
+        let top, bottom;
         if (progress < 0.5) {
             // Day to dusk
-            const t = progress * 2;
-            result = mix(dayColor, duskColor, t);
+            const t = calcProgress(progress, 0, .5);
+            top = mix(dayColor, nightColor, t);
+            bottom = mix(dayColor, nightColor, t);
         } else {
             // Dusk to night
-            const t = (progress - 0.5) * 2;
-            result = mix(duskColor, nightColor, t);
+            const t = calcProgress(progress, .5, .95);
+            top = nightColor;
+            bottom = mix(nightColor, duskColor, t);
         }
 
         const gradient = `linear-gradient(to bottom,
-            rgb(${result.r}, ${result.g}, ${result.b}) 0%,
-            rgb(${Math.max(0, result.r - 5)}, ${Math.max(0, result.g - 5)}, ${Math.max(0, result.b - 5)}) 100%)`;
+            rgb(${top.r}, ${top.g}, ${top.b}) 0%,
+            rgb(${top.r}, ${top.g}, ${top.b}) 40%,
+            rgb(${bottom.r}, ${bottom.g}, ${bottom.b}) 100%) fixed,
+            rgb(2, 2, 5)`; // Set background color when they extra-pull the scroll
 
         body.style.background = gradient;
-        body.style.backgroundAttachment = 'fixed';
 
         // Show stars when night falls (after 30% progress)
         if (progress > 0.3) {
