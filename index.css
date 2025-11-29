@@ -6,12 +6,16 @@ html {
     font-family: "Libre Baskerville", serif;
     font-weight: 400;
     font-style: normal;
+    max-width: 20cm;
+    padding-bottom: 1000vh;
 }
 
 h1 {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #4b2e2e;
+    margin-top: 10em;
+    margin-bottom: 4em;
 }
 
 p {
@@ -31,4 +35,5 @@ p {
 
 .attribution {
     color: #2B201B;
+    margin-top: 4em;
 }
