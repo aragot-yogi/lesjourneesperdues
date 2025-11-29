@@ -1,24 +1,6 @@
 html {
     font-size: 120%;
 }
-body {
-    /*//background-color: #fffdf8;
-    //background: linear-gradient(to bottom, rgb(2, 2, 9, 100%) 10%, rgb(11, 12, 42, 100%) 100%), #fffdf8;
-    //background-attachment: fixed;*/
-}
-
-/* Stars using a pseudo-element */
-/*body::before {*/
-/*    content: "";*/
-/*    position: absolute;*/
-/*    top: 0;*/
-/*    left: 0;*/
-/*    width: 100%;*/
-/*    height: 100%;*/
-/*    background: radial-gradient(white 1px, transparent 1px);*/
-/*    background-size: 80px 80px; !* spacing of stars *!*/
-/*    pointer-events: none;*/
-/*}*/
 
 .container {
     font-family: "Libre Baskerville", serif;
@@ -37,14 +19,16 @@ p {
     -moz-osx-font-smoothing: grayscale;
     color: transparent;
     background:
-            radial-gradient(4px 10px at 20% 30%, #e4d2c2, transparent),
-            radial-gradient(1px 1px at 70% 80%, #d2a679, transparent),
-            radial-gradient(5px 5px at 50% 50%, #d2a679, transparent),
+            radial-gradient(5px 8px at 10px 65px, #e4d2c2, transparent),
+            radial-gradient(5px 8px at 210px 45px, #e4d2c2, transparent),
+            radial-gradient(4px 4px at 55px 45px, #d2a679, transparent),
+            radial-gradient(5px 5px at 150px 62px, #d2a679, transparent),
             #4b2e2e; /* dark brown base */
-    background-size: 50px 30px;
+    background-size: 400px 80px;
     background-clip: text;
     -webkit-background-clip: text;
 }
+
 .attribution {
     color: #2B201B;
 }
