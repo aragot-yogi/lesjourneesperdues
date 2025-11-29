@@ -2,6 +2,7 @@
 const body = document.body;
 const html = document.documentElement;
 const starsContainer = document.getElementById('stars-container');
+let pageLoadTime = new Date().getTime();
 
 function rgb(hex) {
     return {
@@ -45,26 +46,33 @@ createStars(90);
 // Get the text content height
 const container = document.querySelector('.container');
 
-window.addEventListener('scroll', () => {
-    const scrollTop = window.scrollY;
+function calculateBackground() {
+    let scrollTop = window.scrollY;
 
     // Get the bottom of the text content (excluding the padding-bottom)
-    const textContentHeight = container.scrollHeight - window.innerHeight;
-    const contentEnd = container.offsetTop + container.querySelector('.attribution').offsetTop + 1000;
+    let contentEnd = container.offsetTop + container.querySelector('.attribution').offsetTop + 1000;
 
     // Calculate how far past the content we've scrolled
-    const scrollPastContent = Math.max(0, scrollTop - contentEnd);
-    const maxScroll = document.body.clientHeight - contentEnd; // Distance to scroll for full night effect
+    let scrollPastContent = Math.max(0, scrollTop - contentEnd);
+    let maxScroll = document.body.clientHeight - contentEnd; // Distance to scroll for full night effect
 
-    // Progress from 0 to 1
-    const progress = Math.min(scrollPastContent / maxScroll, 1);
+    // Progress in scroll from 0 to 1
+    let progress = Math.min(scrollPastContent / maxScroll, 1);
+    // Progress in time from 0 to 1 (0 = first 5 minutes = night, 1 = next 2 minutes = sunrise)
+    let sunriseDuration = 3 * 60;
+    let sunriseStart = 5 * 60;
+    let timeProgress = calcProgress(new Date().getTime() - pageLoadTime, sunriseStart * 1000, (sunriseStart + sunriseDuration) * 1000);
     console.log(progress);
 
     if (progress > 0) {
-        // Create gradient from day to night
+        // Create gradient from day to night. But with time, the night color becomes a sunrise.
         const dayColor = rgb("#fffdf8");
         const nightColor = rgb("#020205");
         const duskColor = rgb("#0b0c2a");
+        const sunriseSkyColor = rgb("#c62805");
+        const sunriseGroundColor = rgb("#f3c910");
+        const skyColor = mix(nightColor, sunriseSkyColor, timeProgress);
+        const groundColor = mix(duskColor, sunriseGroundColor, timeProgress);
 
         function mix(color1, color2, t) {
             return {
@@ -77,27 +85,27 @@ window.addEventListener('scroll', () => {
         let top, bottom;
         if (progress < 0.5) {
             // Day to dusk
-            const t = calcProgress(progress, 0, .5);
-            top = mix(dayColor, nightColor, t);
-            bottom = mix(dayColor, nightColor, t);
+            let t = calcProgress(progress, 0, .5);
+            top = mix(dayColor, skyColor, t);
+            bottom = mix(dayColor, skyColor, t);
         } else {
             // Dusk to night
-            const t = calcProgress(progress, .5, .95);
-            top = nightColor;
-            bottom = mix(nightColor, duskColor, t);
+            let t = calcProgress(progress, .5, .95);
+            top = skyColor;
+            bottom = mix(skyColor, groundColor, t);
         }
 
-        const gradient = `linear-gradient(to bottom,
-            rgb(${top.r}, ${top.g}, ${top.b}) 0%,
-            rgb(${top.r}, ${top.g}, ${top.b}) 40%,
-            rgb(${bottom.r}, ${bottom.g}, ${bottom.b}) 100%) fixed,
-            rgb(2, 2, 5)`; // Set background color when they extra-pull the scroll
+        let gradient = `linear-gradient(to bottom,
+        rgb(${top.r}, ${top.g}, ${top.b}) 0%,
+        rgb(${top.r}, ${top.g}, ${top.b}) 40%,
+        rgb(${bottom.r}, ${bottom.g}, ${bottom.b}) 100%) fixed,
+        rgb(2, 2, 5)`; // Set background color when they extra-pull the scroll
 
         body.style.background = gradient;
 
         // Show stars when night falls (after 30% progress)
         if (progress > 0.3) {
-            const starOpacity = (progress - 0.3) / 0.7;
+            let starOpacity = (progress - 0.3) / 0.7;
             starsContainer.style.opacity = starOpacity;
         } else {
             starsContainer.style.opacity = 0;
@@ -107,4 +115,7 @@ window.addEventListener('scroll', () => {
         body.style.background = '#fffdf8';
         starsContainer.style.opacity = 0;
     }
-});
+}
+
+window.addEventListener('scroll', calculateBackground);
+window.setInterval(calculateBackground,  1000);
